@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  recipes   Recipe[]
+  createdAt DateTime @default(now())
+}
+
+model Recipe {
+  id          String       @id @default(cuid())
+  title       String
+  slug        String       @unique
+  description String?
+  servings    Int          @default(4)
+  prepTime    Int          @default(0) // minutes
+  cookTime    Int          @default(0) // minutes
+  imageUrl    String?
+  category    Category?    @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+  ingredients Ingredient[]
+  steps       Step[]
+  tags        RecipeTag[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Ingredient {
+  id       String  @id @default(cuid())
+  recipe   Recipe  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId String
+  name     String
+  amount   String
+  unit     String?
+  order    Int     @default(0)
+}
+
+model Step {
+  id          String @id @default(cuid())
+  recipe      Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId    String
+  instruction String
+  order       Int    @default(0)
+}
+
+model Tag {
+  id      String      @id @default(cuid())
+  name    String      @unique
+  slug    String      @unique
+  recipes RecipeTag[]
+}
+
+model RecipeTag {
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId String
+  tag      Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId    String
+
+  @@id([recipeId, tagId])
+}
