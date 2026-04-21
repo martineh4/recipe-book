@@ -14,13 +14,13 @@ A record of key decisions made during development to make it easy to resume or e
 
 ---
 
-## 2. Prisma 7 with `prisma-client-js` generator
+## 2. Prisma 7 with `prisma-client-js` generator + Neon adapter
 
-**Decision:** Use Prisma 7 with the classic `prisma-client-js` generator (not the new `prisma-client` generator).
+**Decision:** Use Prisma 7 with the classic `prisma-client-js` generator and `@prisma/adapter-neon` for the database connection.
 
-**Why:** Prisma 7's new `prisma-client` generator requires Prisma Accelerate (their managed proxy service). Since we're connecting directly to Neon via a standard PostgreSQL connection string, `prisma-client-js` is the correct choice. It outputs to `node_modules/@prisma/client` as usual.
+**Why:** Prisma 7 replaced the binary query engine entirely — even `prisma-client-js` now uses the new WASM-based "client" engine, which requires a database adapter. The connection URL is configured in `prisma.config.ts` (not `schema.prisma`), and `PrismaClient` must be constructed with `{ adapter: new PrismaNeon(...) }`. Without passing an adapter, instantiation throws `PrismaClientConstructorValidationError`.
 
-**Impact:** Import from `@prisma/client`. `package.json` includes `"build": "prisma generate && next build"` so Vercel regenerates the client on every deploy. The singleton pattern in `src/lib/prisma.ts` prevents multiple client instances in dev hot-reload.
+**Impact:** Import from `@prisma/client`. `src/lib/prisma.ts` creates a `PrismaNeon` adapter from `DATABASE_URL` and passes it to `PrismaClient`. The singleton pattern prevents multiple client instances during dev hot-reload. `package.json` includes `"build": "prisma generate && next build"` so Vercel regenerates the client on every deploy.
 
 ---
 
@@ -84,27 +84,27 @@ A record of key decisions made during development to make it easy to resume or e
 
 ---
 
-## Current Status (as of initial build)
+## Current Status (as of 2026-04-20)
 
 - **GitHub:** https://github.com/martineh4/recipe-book
-- **Vercel:** not yet deployed — database must be connected first
-- **Database:** schema written, not yet applied to a real Neon instance
+- **Vercel:** not yet deployed — `DATABASE_URL` env var must be added to Vercel project
+- **Database:** Neon instance connected, schema applied, sample data seeded
 
 ## Resuming Development Checklist
 
 When picking this project back up in a new session:
 
 1. Ensure `.env` has a valid `DATABASE_URL` from [console.neon.tech](https://console.neon.tech)
-2. Run `npm run db:push` to apply the schema (first time) or `npm run db:migrate` for tracked changes
+2. Run `npm run db:push` to apply schema changes, or `npm run db:migrate` for tracked migrations
 3. Run `npm run db:generate` to regenerate the Prisma client (runs automatically on `npm run build`)
-4. Run `npm run dev` to start the dev server at http://localhost:3000
+4. Run `npm run dev` to start the dev server (defaults to http://localhost:3000)
 5. Check `prisma/schema.prisma` for the current data model before making schema changes
 6. Review this file for architectural constraints before adding features
 
 ## What Still Needs Doing
 
-- [ ] Create Neon database and set `DATABASE_URL` in `.env`
-- [ ] Run `npm run db:push` to apply schema to Neon
+- [x] Create Neon database and set `DATABASE_URL` in `.env`
+- [x] Run `npm run db:push` to apply schema to Neon
+- [x] Run `npm run db:seed` for sample recipes
 - [ ] Connect GitHub repo to Vercel and add `DATABASE_URL` as an env var
-- [ ] (Optional) run `npm run db:seed` for sample recipes
 - [ ] (Optional) set up a custom domain on Vercel
