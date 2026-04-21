@@ -23,7 +23,8 @@ function cookTimeFilter(cookTime?: string) {
 export default async function RecipesPage({ searchParams }: { searchParams: SearchParams }) {
   const { category, tag, q, cookTime } = await searchParams;
 
-  const recipes = await prisma.recipe.findMany({
+  const [recipes, categories] = await Promise.all([
+    prisma.recipe.findMany({
     where: {
       ...(category ? { category: { slug: category } } : {}),
       ...(tag ? { tags: { some: { tag: { slug: tag } } } } : {}),
@@ -39,17 +40,13 @@ export default async function RecipesPage({ searchParams }: { searchParams: Sear
     },
     include: { category: true },
     orderBy: { createdAt: "desc" },
-  });
+  }),
+    prisma.category.findMany({ orderBy: { name: "asc" } }),
+  ]);
 
   const activeFilter = category || tag || q || cookTime;
 
-  const headingLabel = q
-    ? `Results for "${q}"`
-    : category
-    ? `Category: ${category}`
-    : tag
-    ? `Tag: ${tag}`
-    : "All Recipes";
+  const headingLabel = q ? `Results for "${q}"` : tag ? `Tag: ${tag}` : "All Recipes";
 
   return (
     <div className="space-y-6">
@@ -76,6 +73,18 @@ export default async function RecipesPage({ searchParams }: { searchParams: Sear
           placeholder="Search recipes by name..."
           className="flex-1 min-w-48 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
         />
+        <select
+          name="category"
+          defaultValue={category ?? ""}
+          className="border border-stone-300 rounded-lg px-3 py-2 text-sm text-stone-700 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+        >
+          <option value="">All categories</option>
+          {categories.map((cat) => (
+            <option key={cat.id} value={cat.slug}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
         <select
           name="cookTime"
           defaultValue={cookTime ?? ""}
