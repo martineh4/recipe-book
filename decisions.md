@@ -106,5 +106,6 @@ When picking this project back up in a new session:
 - [x] Create Neon database and set `DATABASE_URL` in `.env`
 - [x] Run `npm run db:push` to apply schema to Neon
 - [x] Run `npm run db:seed` for sample recipes
-- [ ] Connect GitHub repo to Vercel and add `DATABASE_URL` as an env var
+- [x] Add `DATABASE_URL` to Vercel (all 3 environments: production, preview, development)
+- [ ] Connect GitHub repo in Vercel dashboard (Settings → Git → Connect) for auto-deploys
 - [ ] (Optional) set up a custom domain on Vercel

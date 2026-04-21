@@ -118,12 +118,18 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Deploying to Vercel
 
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link to Vercel: `vercel link`
-3. Add environment variable in Vercel dashboard: `DATABASE_URL`
-4. Deploy: `vercel --prod`
+The project is linked to Vercel (`martineh4s-projects/recipe-book`) and `DATABASE_URL` is set in all environments.
 
-Or connect the GitHub repo to Vercel for automatic deployments on every push.
+To deploy manually:
+
+```bash
+vercel --prod
+```
+
+To enable automatic deployments on every push, connect the GitHub repo in the Vercel dashboard:
+
+1. Go to [vercel.com/martineh4s-projects/recipe-book/settings/git](https://vercel.com/martineh4s-projects/recipe-book/settings/git)
+2. Click **Connect Git Repository** → select `martineh4/recipe-book`
 
 ## Adding Features (future ideas)
 
