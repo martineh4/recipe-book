@@ -78,19 +78,33 @@ A record of key decisions made during development to make it easy to resume or e
 
 **Decision:** Use Tailwind v4 (the version scaffolded by `create-next-app`).
 
-**Why:** It's the latest version and ships with better performance. The config is in `postcss.config.js` / `tailwind.config.js` (or handled automatically by the v4 Vite plugin).
+**Why:** It's the latest version and ships with better performance. Tailwind v4 has no `tailwind.config.js` — configuration is done via CSS (`src/app/globals.css`) and PostCSS (`postcss.config.mjs`).
 
 **Impact:** Stone colour palette used for neutral UI tones; amber for primary accents. No dark mode implemented yet.
 
 ---
 
+## Current Status (as of initial build)
+
+- **GitHub:** https://github.com/martineh4/recipe-book
+- **Vercel:** not yet deployed — database must be connected first
+- **Database:** schema written, not yet applied to a real Neon instance
+
 ## Resuming Development Checklist
 
 When picking this project back up in a new session:
 
-1. Check `README.md` for setup steps
-2. Ensure `.env` has a valid `DATABASE_URL`
-3. Run `npm run db:generate` if `src/generated/prisma` is missing
-4. Run `npm run dev` to start the server
-5. Check `prisma/schema.prisma` for the current data model
-6. Review this file for any architectural constraints before adding features
+1. Ensure `.env` has a valid `DATABASE_URL` from [console.neon.tech](https://console.neon.tech)
+2. Run `npm run db:push` to apply the schema (first time) or `npm run db:migrate` for tracked changes
+3. Run `npm run db:generate` to regenerate the Prisma client (runs automatically on `npm run build`)
+4. Run `npm run dev` to start the dev server at http://localhost:3000
+5. Check `prisma/schema.prisma` for the current data model before making schema changes
+6. Review this file for architectural constraints before adding features
+
+## What Still Needs Doing
+
+- [ ] Create Neon database and set `DATABASE_URL` in `.env`
+- [ ] Run `npm run db:push` to apply schema to Neon
+- [ ] Connect GitHub repo to Vercel and add `DATABASE_URL` as an env var
+- [ ] (Optional) run `npm run db:seed` for sample recipes
+- [ ] (Optional) set up a custom domain on Vercel

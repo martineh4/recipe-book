@@ -50,7 +50,6 @@ src/
     utils.ts                    # slugify, formatTime helpers
   types/
     index.ts                    # Shared TypeScript types
-  generated/prisma/             # Auto-generated Prisma client (gitignored)
 prisma/
   schema.prisma                 # Database schema
   seed.ts                       # Sample data seed script
@@ -61,7 +60,7 @@ prisma/
 ### 1. Clone and install
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/martineh4/recipe-book
 cd recipe-book
 npm install
 ```
