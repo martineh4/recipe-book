@@ -131,6 +131,14 @@ To enable automatic deployments on every push, connect the GitHub repo in the Ve
 1. Go to [vercel.com/martineh4s-projects/recipe-book/settings/git](https://vercel.com/martineh4s-projects/recipe-book/settings/git)
 2. Click **Connect Git Repository** → select `martineh4/recipe-book`
 
+## Documentation
+
+| File | Contents |
+|---|---|
+| `docs/architecture.md` | Text-based architecture diagram — request flow, page map, data flow, API routes, DB schema |
+| `docs/component-map.md` | Every component: purpose, props, and which pages use it |
+| `decisions.md` | Key architectural decisions and their rationale |
+
 ## Adding Features (future ideas)
 
 - Meal planning / weekly planner

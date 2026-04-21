@@ -101,6 +101,16 @@ When picking this project back up in a new session:
 5. Check `prisma/schema.prisma` for the current data model before making schema changes
 6. Review this file for architectural constraints before adding features
 
+## 9. Documentation in `docs/`
+
+**Decision:** Keep architecture and component documentation in `docs/` as Markdown files rather than inline comments or an external wiki.
+
+**Why:** The codebase uses minimal comments by convention. A `docs/` directory gives contributors a single place to understand the system without reading every file, and stays in version control alongside the code so it can't drift out of sync the way a wiki can.
+
+**Impact:** `docs/architecture.md` covers request flow, page structure, data flow, API routes, and the DB schema. `docs/component-map.md` lists every component with its props and which pages use it. Update both files when adding new pages or components.
+
+---
+
 ## What Still Needs Doing
 
 - [x] Create Neon database and set `DATABASE_URL` in `.env`
