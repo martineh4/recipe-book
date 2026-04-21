@@ -18,9 +18,9 @@ A record of key decisions made during development to make it easy to resume or e
 
 **Decision:** Use Prisma 7 with the classic `prisma-client-js` generator and `@prisma/adapter-neon` for the database connection.
 
-**Why:** Prisma 7 replaced the binary query engine entirely — even `prisma-client-js` now uses the new WASM-based "client" engine, which requires a database adapter. The connection URL is configured in `prisma.config.ts` (not `schema.prisma`), and `PrismaClient` must be constructed with `{ adapter: new PrismaNeon(...) }`. Without passing an adapter, instantiation throws `PrismaClientConstructorValidationError`.
+**Why:** Prisma 7 replaced the binary query engine entirely — even `prisma-client-js` now uses the new WASM-based "client" engine, which requires a database adapter. The connection URL is configured in `prisma.config.ts` (not `schema.prisma`), and `PrismaClient` must be constructed with `{ adapter: new PrismaNeonHttp(...) }`. Without passing an adapter, instantiation throws `PrismaClientConstructorValidationError`.
 
-**Impact:** Import from `@prisma/client`. `src/lib/prisma.ts` creates a `PrismaNeon` adapter from `DATABASE_URL` and passes it to `PrismaClient`. The singleton pattern prevents multiple client instances during dev hot-reload. `package.json` includes `"build": "prisma generate && next build"` so Vercel regenerates the client on every deploy.
+**Impact:** Import from `@prisma/client`. `src/lib/prisma.ts` uses `PrismaNeonHttp` (HTTP transport, not WebSocket) from `@prisma/adapter-neon` — HTTP is required for Vercel serverless functions since the `PrismaNeon` WebSocket adapter caused 500 errors at function initialisation. `PrismaNeonHttp` takes a plain connection string directly. The singleton pattern prevents multiple client instances during dev hot-reload. `package.json` includes `"build": "prisma generate && next build"` so Vercel regenerates the client on every deploy.
 
 ---
 
