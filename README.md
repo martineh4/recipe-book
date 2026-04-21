@@ -118,7 +118,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Deploying to Vercel
 
-The project is linked to Vercel (`martineh4s-projects/recipe-book`) and `DATABASE_URL` is set in all environments.
+The project is linked to Vercel (`martineh4s-projects/recipe-book`) and `DATABASE_URL` is set in all environments. Live at **https://recipe-book-phi-beige.vercel.app**.
 
 To deploy manually:
 

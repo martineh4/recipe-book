@@ -87,7 +87,7 @@ A record of key decisions made during development to make it easy to resume or e
 ## Current Status (as of 2026-04-20)
 
 - **GitHub:** https://github.com/martineh4/recipe-book
-- **Vercel:** not yet deployed — `DATABASE_URL` env var must be added to Vercel project
+- **Vercel:** https://recipe-book-phi-beige.vercel.app (production, deployed 2026-04-20)
 - **Database:** Neon instance connected, schema applied, sample data seeded
 
 ## Resuming Development Checklist
