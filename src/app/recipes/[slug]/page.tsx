@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { formatTime, totalTime } from "@/lib/utils";
 import DeleteButton from "./DeleteButton";
+import FavoriteButton from "@/components/FavoriteButton";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,7 @@ export default async function RecipePage({ params }: { params: Params }) {
             )}
           </div>
           <div className="flex gap-2 flex-shrink-0">
+            <FavoriteButton id={recipe.id} />
             <Link
               href={`/recipes/${recipe.slug}/edit`}
               className="px-3 py-1.5 border border-stone-300 hover:bg-stone-50 text-stone-700 text-sm font-medium rounded-lg transition-colors"
